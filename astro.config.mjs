@@ -1,17 +1,18 @@
 import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
-import vercel from '@astrojs/vercel';
 import dotenv from 'dotenv';
+
+import vercel from '@astrojs/vercel';
 
 dotenv.config();
 
 export default defineConfig({
   integrations: [vue()],
-  output: 'hybrid',
-  adapter: vercel({
-    mode: 'edge'
-  }),
+  output: 'server',
+
   server: {
     port: 3000
-  }
+  },
+
+  adapter: vercel()
 });
