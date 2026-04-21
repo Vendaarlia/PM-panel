@@ -7,7 +7,7 @@ dotenv.config();
 
 export default defineConfig({
   integrations: [vue()],
-  output: 'server',
+  output: 'hybrid',
   adapter: vercel(),
   server: {
     port: 3000
