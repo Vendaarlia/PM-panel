@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 
 import vercel from '@astrojs/vercel';
 
+import cloudflare from "@astrojs/cloudflare";
+
 dotenv.config();
 
 export default defineConfig({
@@ -14,5 +16,5 @@ export default defineConfig({
     port: 3000
   },
 
-  adapter: vercel()
+  adapter: cloudflare()
 });
