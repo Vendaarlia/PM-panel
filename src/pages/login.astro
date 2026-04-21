@@ -1,0 +1,194 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Redirect if already logged in
+const sessionCookie = Astro.cookies.get('session');
+if (sessionCookie) {
+  return Astro.redirect('/');
+}
+---
+
+<Layout title="Login | Vendaar Admin">
+  <div class="auth-page">
+    <div class="auth-container">
+      <div class="brand">
+        <span class="logo">Vendaar</span>
+        <span class="divider">|</span>
+        <span class="portal-name">Admin Login</span>
+      </div>
+      
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="your@email.com" />
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6" />
+        </div>
+        
+        <div id="error-message" class="error-message"></div>
+        
+        <button type="submit" class="btn-primary">
+          <i class="fa-solid fa-sign-in-alt"></i> Sign In
+        </button>
+      </form>
+      
+      <p class="auth-footer">
+        Don't have an account? <a href="/register">Register</a>
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('login-form');
+  const errorMessage = document.getElementById('error-message');
+  
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMessage!.textContent = '';
+    
+    const formData = new FormData(form as HTMLFormElement);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        window.location.href = '/';
+      } else {
+        errorMessage!.textContent = data.error || 'Login failed';
+      }
+    } catch (err) {
+      errorMessage!.textContent = 'Network error. Please try again.';
+    }
+  });
+</script>
+
+<style>
+  .auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: var(--color-bg);
+  }
+  
+  .auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+  }
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  
+  .logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-text);
+  }
+  
+  .divider {
+    color: var(--color-text-muted);
+  }
+  
+  .portal-name {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  
+  .form-group input {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 0.9375rem;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  
+  .error-message {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    text-align: center;
+    min-height: 1.25rem;
+  }
+  
+  .btn-primary {
+    padding: 0.875rem 1.5rem;
+    background: var(--color-primary);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s;
+  }
+  
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+  
+  .auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .auth-footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .auth-footer a:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1776644181189,
+      "tag": "0000_fast_butterfly",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1776647239889,
+      "tag": "0001_naive_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1776747510304,
+      "tag": "0002_brown_robin_chapel",
+      "breakpoints": true
+    }
+  ]
+}

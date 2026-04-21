@@ -1,5 +1,13 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
+import vue from '@astrojs/vue';
+import dotenv from 'dotenv';
 
-// https://astro.build/config
-export default defineConfig({});
+dotenv.config();
+
+export default defineConfig({
+  integrations: [vue()],
+  output: 'server',
+  server: {
+    port: 3000
+  }
+});

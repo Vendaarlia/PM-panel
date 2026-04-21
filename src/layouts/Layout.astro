@@ -1,0 +1,116 @@
+---
+import ConfirmDialog from '../components/vue/ConfirmDialog.vue';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Project Manager Dashboard - Manage your client projects efficiently" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+    <!-- Global Confirm Dialog -->
+    <ConfirmDialog client:only="vue" />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* Light mode colors */
+    --color-bg: #fafafa;
+    --color-surface: #ffffff;
+    --color-text: #171717;
+    --color-text-secondary: #525252;
+    --color-text-muted: #737373;
+    --color-border: #e5e5e5;
+    --color-border-hover: #d4d4d4;
+    --color-primary: #171717;
+    --color-success: #22c55e;
+    --color-success-bg: #dcfce7;
+    --color-error: #dc2626;
+    --color-error-bg: #fee2e2;
+    --color-warning: #f59e0b;
+    --color-warning-bg: #fef3c7;
+    --color-info: #3b82f6;
+    --color-info-bg: #dbeafe;
+    --color-status-draft-bg: #f5f5f5;
+    --color-status-draft-text: #525252;
+    --color-status-review-bg: #f5f5f5;
+    --color-status-review-text: #171717;
+    --color-status-done-bg: #dcfce7;
+    --color-status-done-text: #166534;
+  }
+
+  [data-theme="dark"] {
+    --color-bg: #0a0a0a;
+    --color-surface: #171717;
+    --color-text: #fafafa;
+    --color-text-secondary: #a3a3a3;
+    --color-text-muted: #737373;
+    --color-border: #262626;
+    --color-border-hover: #404040;
+    --color-primary: #fafafa;
+    --color-success: #22c55e;
+    --color-success-bg: #14532d;
+    --color-error: #ef4444;
+    --color-error-bg: #7f1d1d;
+    --color-warning: #f59e0b;
+    --color-warning-bg: #78350f;
+    --color-info: #3b82f6;
+    --color-info-bg: #1e3a8a;
+    --color-status-draft-bg: #262626;
+    --color-status-draft-text: #a3a3a3;
+    --color-status-review-bg: #262626;
+    --color-status-review-text: #fafafa;
+    --color-status-done-bg: #14532d;
+    --color-status-done-text: #86efac;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button {
+    font-family: inherit;
+  }
+</style>
