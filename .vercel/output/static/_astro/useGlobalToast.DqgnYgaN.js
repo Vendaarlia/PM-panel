@@ -1,0 +1,1 @@
+function e(){const n=(o,s="info",t=3e3)=>{window.dispatchEvent(new CustomEvent("show-toast",{detail:{message:o,type:s,duration:t}}))};return{success:(o,s)=>n(o,"success",s),error:(o,s)=>n(o,"error",s),warning:(o,s)=>n(o,"warning",s),info:(o,s)=>n(o,"info",s),show:n}}export{e as u};

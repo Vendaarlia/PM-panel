@@ -1,0 +1,95 @@
+{
+	"version": 3,
+	"routes": [
+		{
+			"handle": "filesystem"
+		},
+		{
+			"src": "^/_astro/(.*)$",
+			"headers": {
+				"cache-control": "public, max-age=31536000, immutable"
+			},
+			"continue": true
+		},
+		{
+			"src": "^/_server-islands/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/_image/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/auth/login/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/auth/logout/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/auth/me/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/auth/register/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/get-notes/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/mark-read/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/notes/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/projects/([^/]+?)/mark-read/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/projects/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/send-note/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/share/notes/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/share/status/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/upload/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/login/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/project/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/register/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/share/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/$",
+			"dest": "_render"
+		}
+	]
+}

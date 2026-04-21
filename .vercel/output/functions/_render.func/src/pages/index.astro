@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectForm from '../components/vue/ProjectForm.vue';
+import ProjectList from '../components/vue/ProjectList.vue';
+import ThemeToggle from '../components/vue/ThemeToggle.vue';
+import Toast from '../components/vue/Toast.vue';
+
+// Check auth
+const sessionCookie = Astro.cookies.get('session');
+if (!sessionCookie) {
+  return Astro.redirect('/login');
+}
+
+const user = JSON.parse(sessionCookie.value);
+---
+
+<Layout title="Client Handoff Dashboard">
+  <div class="dashboard">
+    <div class="header-container">
+      <header class="portal-header">
+        <div class="brand">
+          <span class="logo">PM-panel</span>
+          <span class="divider">|</span>
+          <span class="portal-name">Admin Dashboard</span>
+        </div>
+        <div class="header-actions">
+          <span class="user-name">{user.name}</span>
+          <ThemeToggle client:load />
+          <button id="logout-btn" class="btn-logout" title="Logout">
+            <i class="fa-solid fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </header>
+    </div>
+
+    <header class="page-header">
+      <h1>Project Manager Dashboard</h1>
+      <p class="subtitle">Manage your client projects efficiently</p>
+    </header>
+
+    <div class="dashboard-grid">
+      <section class="form-section">
+        <h2>Create Project</h2>
+        <ProjectForm client:load />
+      </section>
+
+      <section class="list-section">
+        <h2>All Projects</h2>
+        <ProjectList client:load />
+      </section>
+    </div>
+  </div>
+  
+  <!-- Global Toast Container - client:only karena pakai Teleport -->
+  <Toast client:only="vue" position="top-right" />
+</Layout>
+
+<style>
+  .dashboard {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+  }
+
+  .header-container {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .portal-header {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .divider {
+    color: var(--color-text-muted);
+  }
+
+  .portal-name {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .user-name {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .btn-logout {
+    padding: 0.5rem;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .btn-logout:hover {
+    background: var(--color-error);
+    color: var(--color-bg);
+    border-color: var(--color-error);
+  }
+
+  .page-header {
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+
+  .dashboard-grid {
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto;
+    padding-bottom: 1.5rem;
+    
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 900px) {
+    .dashboard-grid {
+      grid-template-columns: 320px 1fr;
+    }
+  }
+
+  section h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+
+  .form-section {
+    background: var(--color-surface);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    height: fit-content;
+  }
+
+  .list-section {
+    min-width: 0;
+  }
+</style>
+
+<script>
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/auth/logout', { method: 'POST' });
+      if (response.ok) {
+        window.location.href = '/login';
+      }
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  });
+</script>
