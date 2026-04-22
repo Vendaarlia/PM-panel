@@ -14,6 +14,19 @@
 // Turso Platform API Base URL
 const TURSO_API_BASE = 'https://api.turso.tech/v1';
 
+// Support both Node.js (process.env) and Cloudflare Workers (import.meta.env)
+const getEnvVar = (name: string): string | undefined => {
+  // Try import.meta.env first (Cloudflare/Astro)
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env[name] || import.meta.env[`PUBLIC_${name}`];
+  }
+  // Fallback to process.env (Node.js)
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[name];
+  }
+  return undefined;
+};
+
 interface TursoDatabase {
   name: string;
   hostname: string;
@@ -35,7 +48,7 @@ interface CreateTokenResponse {
 
 // Get API token from environment
 function getApiToken(): string {
-  const token = process.env.TURSO_PLATFORM_API_TOKEN;
+  const token = getEnvVar('TURSO_PLATFORM_API_TOKEN');
   if (!token) {
     throw new Error('TURSO_PLATFORM_API_TOKEN environment variable is required');
   }
@@ -43,7 +56,7 @@ function getApiToken(): string {
 }
 
 function getOrganization(): string {
-  const org = process.env.TURSO_ORGANIZATION;
+  const org = getEnvVar('TURSO_ORGANIZATION');
   if (!org) {
     throw new Error('TURSO_ORGANIZATION environment variable is required');
   }
@@ -51,11 +64,11 @@ function getOrganization(): string {
 }
 
 function getGroup(): string | undefined {
-  return process.env.TURSO_GROUP;
+  return getEnvVar('TURSO_GROUP');
 }
 
 function getLocation(): string {
-  return process.env.TURSO_LOCATION || 'sin'; // Default to Singapore
+  return getEnvVar('TURSO_LOCATION') || 'sin'; // Default to Singapore
 }
 
 /**
