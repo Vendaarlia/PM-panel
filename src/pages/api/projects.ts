@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getAllProjects, createProject, updateProjectStatus, deleteProject } from '../../lib/query';
 import { getUniqueSlug } from '../../lib/master-db';
+import type { Project } from '../../db/schema';
 
 export const GET: APIRoute = async () => {
   try {
@@ -35,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Get all existing projects to generate unique slug
     const existingProjects = await getAllProjects();
-    const existingSlugs = existingProjects.map(p => p.slug);
+    const existingSlugs = existingProjects.map((p: Project) => p.slug);
     const slug = getUniqueSlug(name, existingSlugs);
 
     const project = await createProject({
