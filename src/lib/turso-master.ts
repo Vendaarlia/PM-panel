@@ -18,22 +18,7 @@ import type { Database as BetterSQLite3DatabaseType } from 'better-sqlite3';
 import * as schema from '../db/schema';
 
 // Check if we're in a Turso environment
-// Support both Node.js (process.env) and Cloudflare Workers (import.meta.env)
-const getEnvVar = (name: string): string | undefined => {
-  // Try import.meta.env first (Cloudflare/Astro)
-  if (typeof import.meta !== 'undefined' && import.meta.env) {
-    return import.meta.env[name] || import.meta.env[`PUBLIC_${name}`];
-  }
-  // Fallback to process.env (Node.js)
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env[name];
-  }
-  return undefined;
-};
-
-const TURSO_MASTER_DB_URL = getEnvVar('TURSO_MASTER_DB_URL');
-const TURSO_MASTER_DB_TOKEN = getEnvVar('TURSO_MASTER_DB_TOKEN');
-const isTursoEnvironment = TURSO_MASTER_DB_URL && TURSO_MASTER_DB_TOKEN;
+const isTursoEnvironment = process.env.TURSO_MASTER_DB_URL && process.env.TURSO_MASTER_DB_TOKEN;
 
 // Type for Master DB - can be either LibSQL (Turso) or BetterSQLite3 (local)
 export type MasterDb = LibSQLDatabase<typeof schema> | BetterSQLite3Database<typeof schema>;
@@ -42,8 +27,8 @@ function createMasterClient() {
   if (isTursoEnvironment) {
     // Production/Edge: Use Turso LibSQL
     const config: LibsqlConfig = {
-      url: TURSO_MASTER_DB_URL!,
-      authToken: TURSO_MASTER_DB_TOKEN!,
+      url: process.env.TURSO_MASTER_DB_URL!,
+      authToken: process.env.TURSO_MASTER_DB_TOKEN!,
     };
     
     return createClient(config);
