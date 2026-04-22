@@ -4,17 +4,27 @@ import { getUniqueSlug } from '../../lib/master-db';
 import type { Project } from '../../db/schema';
 
 export const GET: APIRoute = async () => {
+  console.log('[GET /api/projects] Starting request...');
   try {
+    console.log('[GET /api/projects] Calling getAllProjects...');
     const projects = await getAllProjects();
+    console.log('[GET /api/projects] Success, projects count:', projects.length);
     return new Response(JSON.stringify(projects), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('GET projects error:', error);
+    console.error('[GET /api/projects] ERROR:', error);
+    console.error('[GET /api/projects] Error stack:', error instanceof Error ? error.stack : 'No stack');
+    console.error('[GET /api/projects] Environment check:', {
+      hasDbUrl: !!process.env.TURSO_MASTER_DB_URL,
+      hasDbToken: !!process.env.TURSO_MASTER_DB_TOKEN,
+      nodeEnv: process.env.NODE_ENV,
+    });
     return new Response(JSON.stringify({ 
       error: 'Failed to fetch projects',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -35,7 +45,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Get all existing projects to generate unique slug
+    console.log('[POST /api/projects] Fetching existing projects...');
     const existingProjects = await getAllProjects();
+    console.log('[POST /api/projects] Found', existingProjects.length, 'existing projects');
     const existingSlugs = existingProjects.map((p: Project) => p.slug);
     const slug = getUniqueSlug(name, existingSlugs);
 

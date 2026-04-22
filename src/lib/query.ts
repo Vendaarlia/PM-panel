@@ -36,10 +36,21 @@ export async function createUser(data: NewUser) {
 }
 
 export async function getAllProjects() {
-  const db = await getDb();
-  return (db as any).query.projects.findMany({
-    orderBy: desc(projects.createdAt),
-  });
+  console.log('[getAllProjects] Starting...');
+  try {
+    console.log('[getAllProjects] Calling getDb...');
+    const db = await getDb();
+    console.log('[getAllProjects] DB acquired, querying projects...');
+    const result = await (db as any).query.projects.findMany({
+      orderBy: desc(projects.createdAt),
+    });
+    console.log('[getAllProjects] Success, found', result?.length || 0, 'projects');
+    return result;
+  } catch (error) {
+    console.error('[getAllProjects] ERROR:', error);
+    console.error('[getAllProjects] Stack:', error instanceof Error ? error.stack : 'No stack');
+    throw error;
+  }
 }
 
 export async function getProjectById(id: number) {

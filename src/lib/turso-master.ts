@@ -54,15 +54,26 @@ let localMasterDb: BetterSQLite3Database<typeof schema> | null = null;
  * - In local dev: Falls back to better-sqlite3
  */
 export async function getMasterDb(): Promise<MasterDb> {
+  console.log('[getMasterDb] Environment check - isTurso:', !!isTursoEnvironment);
+  console.log('[getMasterDb] hasUrl:', !!process.env.TURSO_MASTER_DB_URL, 'hasToken:', !!process.env.TURSO_MASTER_DB_TOKEN);
+  
   if (isTursoEnvironment) {
+    console.log('[getMasterDb] Using Turso/LibSQL environment');
     if (!tursoMasterDb) {
+      console.log('[getMasterDb] Creating new Turso client...');
       const client = createMasterClient();
       if (client) {
+        console.log('[getMasterDb] Client created, initializing drizzle...');
         tursoMasterDb = drizzleLibsql(client, { schema });
+      } else {
+        console.error('[getMasterDb] Failed to create Turso client');
       }
+    } else {
+      console.log('[getMasterDb] Reusing existing Turso connection');
     }
     return tursoMasterDb!;
   } else {
+    console.log('[getMasterDb] Using local SQLite fallback');
     // Fallback to local SQLite for development
     if (!localMasterDb) {
       const { masterDb } = await import('./master-db');
