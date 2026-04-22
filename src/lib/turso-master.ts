@@ -17,8 +17,21 @@ import { createClient, type Config as LibsqlConfig } from '@libsql/client';
 import type { Database as BetterSQLite3DatabaseType } from 'better-sqlite3';
 import * as schema from '../db/schema';
 
+// Helper to get env vars - works in both Node.js and Cloudflare Workers
+function getEnvVar(name: string): string | undefined {
+  // Try Cloudflare Workers runtime first
+  if (typeof globalThis !== 'undefined' && (globalThis as any)[name]) {
+    return (globalThis as any)[name];
+  }
+  // Fall back to process.env for Node.js
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[name];
+  }
+  return undefined;
+}
+
 // Check if we're in a Turso environment
-const isTursoEnvironment = process.env.TURSO_MASTER_DB_URL && process.env.TURSO_MASTER_DB_TOKEN;
+const isTursoEnvironment = !!getEnvVar('TURSO_MASTER_DB_URL') && !!getEnvVar('TURSO_MASTER_DB_TOKEN');
 
 // Type for Master DB - can be either LibSQL (Turso) or BetterSQLite3 (local)
 export type MasterDb = LibSQLDatabase<typeof schema> | BetterSQLite3Database<typeof schema>;
@@ -26,9 +39,14 @@ export type MasterDb = LibSQLDatabase<typeof schema> | BetterSQLite3Database<typ
 function createMasterClient() {
   if (isTursoEnvironment) {
     // Production/Edge: Use Turso LibSQL
+    const url = getEnvVar('TURSO_MASTER_DB_URL');
+    const authToken = getEnvVar('TURSO_MASTER_DB_TOKEN');
+    
+    console.log('[createMasterClient] Creating Turso client with URL:', url?.substring(0, 20) + '...');
+    
     const config: LibsqlConfig = {
-      url: process.env.TURSO_MASTER_DB_URL!,
-      authToken: process.env.TURSO_MASTER_DB_TOKEN!,
+      url: url!,
+      authToken: authToken!,
     };
     
     return createClient(config);
@@ -55,7 +73,8 @@ let localMasterDb: BetterSQLite3Database<typeof schema> | null = null;
  */
 export async function getMasterDb(): Promise<MasterDb> {
   console.log('[getMasterDb] Environment check - isTurso:', !!isTursoEnvironment);
-  console.log('[getMasterDb] hasUrl:', !!process.env.TURSO_MASTER_DB_URL, 'hasToken:', !!process.env.TURSO_MASTER_DB_TOKEN);
+  console.log('[getMasterDb] hasUrl:', !!getEnvVar('TURSO_MASTER_DB_URL'), 'hasToken:', !!getEnvVar('TURSO_MASTER_DB_TOKEN'));
+  console.log('[getMasterDb] Runtime:', typeof (globalThis as any).WebSocket !== 'undefined' ? 'Cloudflare Workers' : 'Node.js');
   
   if (isTursoEnvironment) {
     console.log('[getMasterDb] Using Turso/LibSQL environment');
