@@ -2,7 +2,16 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
 import { eq, desc } from 'drizzle-orm';
 import { notes } from '../db/schema';
-import { masterDb, ensureNotesDir } from './master-db';
+// Lazy imports to avoid Cloudflare Workers module-level execution
+async function getMasterDb() {
+  const { getMasterDb: getDb } = await import('./turso-master');
+  return getDb();
+}
+
+async function ensureNotesDir() {
+  const { ensureNotesDir: ensure } = await import('./master-db');
+  return ensure();
+}
 import { existsSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 
@@ -29,14 +38,14 @@ function initTenantSchema(sqlite: Database.Database) {
 }
 
 // Get or create tenant DB instance for a project
-export function getTenantDb(slug: string) {
+export async function getTenantDb(slug: string) {
   // Check cache first
   if (tenantDbCache.has(slug)) {
     return tenantDbCache.get(slug)!;
   }
 
-  // Ensure notes directory exists
-  ensureNotesDir();
+  // Ensure notes directory exists (local dev only)
+  await ensureNotesDir();
 
   const dbPath = `${NOTES_DIR}/note-${slug}.db`;
   const dbExists = existsSync(dbPath);
@@ -72,7 +81,8 @@ export async function syncMasterDbOnNewNote(
   // Only mark as unread if message is from client
   const hasUnread = authorRole === 'client';
   
-  await masterDb
+  const db = await getMasterDb();
+  await (db as any)
     .update(projects)
     .set({
       hasUnread,
@@ -85,7 +95,8 @@ export async function syncMasterDbOnNewNote(
 export async function markProjectAsRead(slug: string) {
   const { projects } = await import('../db/schema');
   
-  await masterDb
+  const db = await getMasterDb();
+  await (db as any)
     .update(projects)
     .set({
       hasUnread: false,
@@ -105,7 +116,7 @@ export async function createNoteInTenant(
     attachmentName?: string;
   }
 ) {
-  const db = getTenantDb(slug);
+  const db = await getTenantDb(slug);
   
   const result = await db.insert(notes).values({
     content: data.content,
@@ -125,14 +136,14 @@ export async function createNoteInTenant(
 
 // Get all notes from tenant DB
 export async function getNotesFromTenant(slug: string) {
-  const db = getTenantDb(slug);
+  const db = await getTenantDb(slug);
   
   return db.select().from(notes).orderBy(desc(notes.createdAt));
 }
 
 // Delete note from tenant DB
 export async function deleteNoteFromTenant(slug: string, noteId: number) {
-  const db = getTenantDb(slug);
+  const db = await getTenantDb(slug);
   
   return db.delete(notes).where(eq(notes.id, noteId));
 }

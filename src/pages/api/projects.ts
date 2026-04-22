@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getAllProjects, createProject, updateProjectStatus, deleteProject } from '../../lib/query';
-import { getUniqueSlug } from '../../lib/master-db';
+import { getUniqueSlug } from '../../lib/slug';
 import type { Project } from '../../db/schema';
 
 export const GET: APIRoute = async () => {
