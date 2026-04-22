@@ -14,7 +14,7 @@
     "link:tenant": "bun run scripts/link-tenant.ts"
   },
   "dependencies": {
-    "@astrojs/vercel": "^9.0.0",
+    "@astrojs/cloudflare": "^13.1.10",
     "@astrojs/vue": "^5.0.0",
     "@libsql/client": "^0.14.0",
     "@types/bcryptjs": "^3.0.0",

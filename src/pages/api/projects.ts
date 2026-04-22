@@ -10,7 +10,11 @@ export const GET: APIRoute = async () => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch projects' }), {
+    console.error('GET projects error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Failed to fetch projects',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
