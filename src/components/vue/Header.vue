@@ -78,6 +78,10 @@ const toggleMenu = () => {
     font-size: 18px;
 }
 
+.logo a {
+    text-decoration: none;
+}
+
 .nav-links {
     display: flex;
     align-items: center;
