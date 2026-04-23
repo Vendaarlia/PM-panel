@@ -5,6 +5,7 @@ import {
   createNoteInTenant,
   getNotesFromTenant,
   deleteNoteFromTenant,
+  deleteAllNotesFromTenant,
   markProjectAsRead
 } from './turso-tenant';
 import { users, projects, type NewUser, type NewProject } from '../db/schema';
@@ -85,6 +86,24 @@ export async function updateProjectStatus(id: number, status: 'draft' | 'review'
 
 export async function deleteProject(id: number) {
   const db = await getDb();
+  
+  // Get project first to get the slug for deleting notes
+  const project = await (db as any).query.projects.findFirst({
+    where: eq(projects.id, id),
+  });
+  
+  if (project) {
+    // Delete all notes from tenant DB
+    try {
+      await deleteAllNotesFromTenant(project.slug);
+      console.log(`[deleteProject] Deleted all notes for project ${project.slug}`);
+    } catch (error) {
+      console.error(`[deleteProject] Failed to delete notes for ${project.slug}:`, error);
+      // Continue to delete project even if notes deletion fails
+    }
+  }
+  
+  // Delete project from master DB
   return (db as any).delete(projects).where(eq(projects.id, id));
 }
 

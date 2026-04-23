@@ -148,6 +148,12 @@ export async function deleteNoteFromTenant(slug: string, noteId: number) {
   return db.delete(notes).where(eq(notes.id, noteId));
 }
 
+// Delete all notes for a project (called when project is deleted)
+export async function deleteAllNotesFromTenant(slug: string) {
+  const db = await getTenantDb(slug);
+  return db.delete(notes);
+}
+
 // Clear cache (useful for testing or when DB files change externally)
 export function clearTenantDbCache() {
   tenantDbCache.clear();

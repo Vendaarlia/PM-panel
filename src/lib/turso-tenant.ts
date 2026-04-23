@@ -230,6 +230,17 @@ export async function deleteNoteFromTenant(
 }
 
 /**
+ * Delete all notes for a project (called when project is deleted)
+ * 
+ * @param slug - Project slug
+ */
+export async function deleteAllNotesFromTenant(slug: string): Promise<void> {
+  const tenantDb = await getTenantClientBySlug(slug);
+  
+  await tenantDb.delete(notes);
+}
+
+/**
  * Initialize tenant database schema
  * 
  * Creates the notes table in a fresh tenant database.
