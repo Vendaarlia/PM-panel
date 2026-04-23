@@ -9,6 +9,8 @@ data.db
 .env.*.local
 .vercel
 
+cleanup-secrets.sh
+
 # wrangler files
 .wrangler
 .dev.vars*
