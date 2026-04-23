@@ -24,7 +24,11 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 PM-Panel. Built with Astro, Vue 3, and Turso.</p>
+                <p>&copy; 2026 PM-Panel. 
+                    <a href="https://vendaar.top" target="_blank" class="contact-link">
+                        <i class="fa-solid fa-user"></i>
+                        Dev by Vendaar
+                    </a></p>
             </div>
         </div>
     </footer>

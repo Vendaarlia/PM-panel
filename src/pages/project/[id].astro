@@ -316,6 +316,31 @@ const shareUrl = `${Astro.url.origin}/share/${project.shareToken}`;
   }
 
   @media (max-width: 640px) {
+    .brand {
+      gap: 0.5rem;
+    }
+
+    .brand .divider,
+    .brand .portal-name {
+      display: none;
+    }
+
+    .header-actions {
+      gap: 0.5rem;
+    }
+
+    .user-name {
+      font-size: 0.875rem;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-logout {
+      padding: 0.5rem;
+    }
+
     .project-header {
       flex-direction: column;
       align-items: flex-start;

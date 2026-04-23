@@ -1,26 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/vue/Header.vue';
 import Footer from '../components/vue/Footer.vue';
 ---
 
 <Layout title="PM-Panel - Stop Losing Clients to Miscommunication">
     <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <div class="logo">
-                    <span>PM-Panel</span>
-                </div>
-                <div class="nav-links">
-                    <a href="#features">Features</a>
-                    <a href="#how-it-works">How It Works</a>
-                    <a href="#faq">FAQ</a>
-                    <a href="/login" data-astro-reload><button class="btn btn-secondary">Login</button></a>
-                    <a href="/register" data-astro-reload><button class="btn btn-primary">Register</button></a>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <Header client:only="vue" />
 
     <!-- Hero Section -->
     <section class="hero">
@@ -31,8 +17,7 @@ import Footer from '../components/vue/Footer.vue';
                     PM-Panel is the all-in-one client project management platform built for freelancers and agencies who want to eliminate endless email threads, missed deadlines, and scope creep.
                 </p>
                 <div class="hero-cta">
-                    <button class="btn btn-primary btn-large">Start Your First Project — Free Forever</button>
-                    <button class="btn btn-secondary btn-large">See How It Works (2-Min Demo)</button>
+                    <a href="/register" data-astro-reload><button class="btn btn-primary">Start Your First Project — Free Forever</button></a>
                 </div>
                 <p class="hero-trust">Join 500+ Freelancers Delivering Better Client Experiences</p>
             </div>
