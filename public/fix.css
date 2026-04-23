@@ -41,8 +41,10 @@
 
     /* Hero Section */
     .hero {
+        position: relative;
         padding: 80px 0;
         text-align: center;
+        overflow: hidden;
     }
 
     .hero-content {
@@ -79,7 +81,12 @@
 
     /* Section */
     .section {
+        width: 100%;
+        min-height: 100vh;
         padding: 80px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .section-title {
@@ -95,10 +102,14 @@
     }
 
     .problem-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 24px;
         margin-bottom: 40px;
+    }
+
+    .problem-card {
+        flex: 1 1 280px;
     }
 
     .problem-card {
@@ -178,7 +189,7 @@
 
     .solution-why {
         padding: 24px;
-        background: var(--color-info-bg);
+        background: var(--purple-dim);
         border-radius: 12px;
     }
 
@@ -200,12 +211,15 @@
 
     /* Features Section */
     .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
+        flex: 1 1 280px;
         gap: 32px;
+        margin: 80px 0;
     }
 
     .feature-card {
+        flex: 1 1 280px;
         padding: 32px;
         background: var(--color-surface);
         border: 1px solid var(--color-border);
@@ -246,7 +260,7 @@
         content: "✓";
         position: absolute;
         left: 0;
-        color: var(--color-success);
+        color: var(--purple);
         font-weight: 700;
     }
 
@@ -346,7 +360,7 @@
     .step-result {
         margin-top: 16px;
         padding: 16px;
-        background: var(--color-success-bg);
+        background: var(--purple-dim);
         border-radius: 8px;
     }
 
@@ -386,14 +400,14 @@
     }
 
     .tips-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 16px;
     }
 
     .tip {
         padding: 16px;
-        background: var(--color-surface);
+        background: var(--purple-dim);
         border-radius: 8px;
         font-size: 14px;
     }
@@ -419,13 +433,11 @@
         grid-template-columns: 1fr 2fr 2fr;
         gap: 16px;
         padding: 16px;
-        border-bottom: 1px solid var(--color-border);
     }
 
     .comparison-header {
         font-weight: 700;
         background: var(--color-surface);
-        border-radius: 8px 8px 0 0;
     }
 
     .comparison-row:last-child {
@@ -441,7 +453,7 @@
     }
 
     .comparison-solution {
-        color: var(--color-success);
+        color: var(--purple);
         font-weight: 500;
     }
 
@@ -451,9 +463,13 @@
     }
 
     .audience-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 32px;
+    }
+
+    .audience-card {
+        flex: 1 1 300px;
     }
 
     .audience-card {
@@ -512,6 +528,9 @@
         cursor: pointer;
         user-select: none;
         list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .faq-item summary::-webkit-details-marker {
@@ -537,8 +556,10 @@
 
     /* CTA Section */
     .section-cta {
-        background: var(--color-primary);
         color: var(--color-bg);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
     }
 
     .cta-content {
@@ -550,17 +571,19 @@
     .cta-content h2 {
         font-size: 36px;
         margin-bottom: 16px;
+        color: white;
     }
 
     .cta-content p {
         font-size: 18px;
         margin-bottom: 32px;
         opacity: 0.9;
+        color: white;
     }
 
-    .cta-content .btn-primary {
-        background: var(--color-bg);
-        color: var(--color-primary);
+    .btn-primary {
+        background: white;
+        color: var(--color-bg);
     }
 
     /* Responsive */

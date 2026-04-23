@@ -18,12 +18,12 @@ const toggleMenu = () => {
 
                 <!-- Desktop Navigation -->
                 <div class="nav-links desktop">
-                    <a href="/#features">Features</a>
-                    <a href="/#how-it-works">How It Works</a>
-                    <a href="/#faq">FAQ</a>
-                    <a href="/about">About</a>
-                    <a href="/login" data-astro-reload>Login</a>
-                    <a href="/register" data-astro-reload><button class="btn btn-primary">Get Started</button></a>
+                    <a class="btn" href="/#features">Features</a>
+                    <a class="btn" href="/#how-it-works">How It Works</a>
+                    <a class="btn" href="/#faq">FAQ</a>
+                    <a class="btn" href="/about">About</a>
+                    <a class="btn" href="/login" data-astro-reload>Login</a>
+                    <a class="btn-primary" href="/register" data-astro-reload>Get Started</a>
                 </div>
 
                 <!-- Hamburger Button -->
@@ -36,14 +36,12 @@ const toggleMenu = () => {
 
             <!-- Mobile Navigation Menu -->
             <div class="mobile-menu" :class="{ 'open': isMenuOpen }">
-                <a href="/#features" @click="isMenuOpen = false">Features</a>
-                <a href="/#how-it-works" @click="isMenuOpen = false">How It Works</a>
-                <a href="/#faq" @click="isMenuOpen = false">FAQ</a>
-                <a href="/about" @click="isMenuOpen = false">About</a>
-                <a href="/login" data-astro-reload @click="isMenuOpen = false">Login</a>
-                <a href="/register" data-astro-reload @click="isMenuOpen = false">
-                    <button class="btn btn-primary">Get Started</button>
-                </a>
+                <a class="btn" href="/#features" @click="isMenuOpen = false">Features</a>
+                <a class="btn" href="/#how-it-works" @click="isMenuOpen = false">How It Works</a>
+                <a class="btn" href="/#faq" @click="isMenuOpen = false">FAQ</a>
+                <a class="btn" href="/about" @click="isMenuOpen = false">About</a>
+                <a class="btn" href="/login" data-astro-reload @click="isMenuOpen = false">Login</a>
+                <a class="btn-primary" href="/register" data-astro-reload @click="isMenuOpen = false">Get Started</a>
             </div>
         </div>
     </header>
@@ -78,7 +76,8 @@ const toggleMenu = () => {
     font-size: 18px;
 }
 
-.logo a {
+.logo a,
+a {
     text-decoration: none;
 }
 
@@ -88,26 +87,28 @@ const toggleMenu = () => {
     gap: 32px;
 }
 
-.nav-links a {
+.nav-links .btn {
     color: var(--color-text-secondary);
     transition: color 0.2s;
     text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
 }
 
-.nav-links a:hover {
+.nav-links .btn:hover {
+    background-color: var(--purple-dim);
     color: var(--color-text);
+    border: 1px solid var(--purple-glow);
 }
 
-.btn {
+.btn-primary {
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
     font-weight: 500;
     transition: all 0.2s;
     cursor: pointer;
-}
-
-.btn-primary {
     background: var(--color-primary);
     color: var(--color-bg);
 }
@@ -169,10 +170,13 @@ const toggleMenu = () => {
 }
 
 .mobile-menu a {
-    color: var(--color-text-secondary);
     text-decoration: none;
-    padding: 8px 0;
     transition: color 0.2s;
+    padding: auto;
+}
+
+.mobile-menu .btn-primary {
+    text-align: center;
 }
 
 .mobile-menu a:hover {
