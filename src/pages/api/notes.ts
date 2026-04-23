@@ -26,7 +26,12 @@ export const GET: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch notes' }), {
+    console.error('[GET /api/notes] ERROR:', error);
+    console.error('[GET /api/notes] Stack:', error instanceof Error ? error.stack : 'No stack');
+    return new Response(JSON.stringify({ 
+      error: 'Failed to fetch notes',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -73,7 +78,12 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to create note' }), {
+    console.error('[POST /api/notes] ERROR:', error);
+    console.error('[POST /api/notes] Stack:', error instanceof Error ? error.stack : 'No stack');
+    return new Response(JSON.stringify({ 
+      error: 'Failed to create note',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

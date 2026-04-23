@@ -83,6 +83,8 @@ export function getTenantClient(
 export async function getTenantClientBySlug(
   slug: string
 ): Promise<LibSQLDatabase<TenantSchema>> {
+  console.log(`[getTenantClientBySlug] Getting tenant client for slug: ${slug}`);
+  
   const masterDb = await getMasterDb();
   
   // Fetch project with Turso credentials from Master DB
@@ -95,20 +97,35 @@ export async function getTenantClientBySlug(
     .where(eq(projects.slug, slug))
     .limit(1);
   
+  console.log(`[getTenantClientBySlug] Project result:`, projectResult.length > 0 ? 'found' : 'not found');
+  
   if (projectResult.length === 0) {
     throw new Error(`Project with slug "${slug}" not found`);
   }
   
   const project = projectResult[0];
+  console.log(`[getTenantClientBySlug] Has tursoDbUrl: ${!!project.tursoDbUrl}, Has tursoDbToken: ${!!project.tursoDbToken}`);
   
-  if (!project.tursoDbUrl || !project.tursoDbToken) {
+  // Get credentials from project or fallback to env vars
+  let dbUrl = project.tursoDbUrl;
+  let dbToken = project.tursoDbToken;
+  
+  // Fallback to env vars if project credentials not set (for quick setup)
+  if (!dbUrl || !dbToken) {
+    console.log(`[getTenantClientBySlug] Using env vars fallback`);
+    dbUrl = (globalThis as any).TURSO_TENANT_DB_URL || process.env.TURSO_TENANT_DB_URL;
+    dbToken = (globalThis as any).TURSO_TENANT_DB_TOKEN || process.env.TURSO_TENANT_DB_TOKEN;
+  }
+  
+  if (!dbUrl || !dbToken) {
     throw new Error(
-      `Project "${slug}" does not have Turso database configured. ` +
-      `Please run migration to set up tenant database.`
+      `Project "${slug}" does not have Turso database configured ` +
+      `and TURSO_TENANT_DB_URL/TURSO_TENANT_DB_TOKEN env vars not set.`
     );
   }
   
-  return getTenantClient(project.tursoDbUrl, project.tursoDbToken);
+  console.log(`[getTenantClientBySlug] Creating tenant client with URL: ${dbUrl.substring(0, 30)}...`);
+  return getTenantClient(dbUrl, dbToken);
 }
 
 /**

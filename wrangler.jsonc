@@ -17,6 +17,8 @@
   "vars": {
     "TURSO_MASTER_DB_URL": "libsql://master-db-joomlacort.aws-ap-northeast-1.turso.io",
     "TURSO_MASTER_DB_TOKEN": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzY3NTE3NTMsImlkIjoiMDE5ZGFlM2EtOTMwMS03ZjZiLTg0NDAtNjVjOWRhMDFkYmJmIiwicmlkIjoiNTRjZDA4MjctNjQ0My00ZGQwLWI0MzMtZjQxMWE1NDYwMWViIn0.y5_THgGW5LBRBIJjhSc0iW6QLB1oQvYT-8BjNe3Cz5H7b64cIgH97aQJQDTNRSClV-7Ks7MiWVqi2doh548HDQ",
-    "SESSION_SECRET": "SESSION_SECRET=tHzDgCBFPejt8ZwSx0wMC0BWkvCjRN81opzxpyd6NQc="
+    "SESSION_SECRET": "SESSION_SECRET=tHzDgCBFPejt8ZwSx0wMC0BWkvCjRN81opzxpyd6NQc=",
+    "TURSO_TENANT_DB_URL": "libsql://tenant-my-project-joomlacort.aws-ap-northeast-1.turso.io",
+    "TURSO_TENANT_DB_TOKEN": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzY3NTM2ODAsImlkIjoiMDE5ZGFlNGYtNGQwMS03YTllLWFiZTEtNjcxODhlNmNkYjJkIiwicmlkIjoiMjRmNTY2N2MtN2Q5Zi00MzRhLWJlMWEtYjMwNDQzOGYwNjg5In0.tHgcr54qO24bwfEqsPC_UPaPa3kvynpsXf52t4DzjXcz6flTQt-5pG3cz1RwpIqKhjaJ6RqQ2kqvw5GbzrvKBg"
   }
 }
