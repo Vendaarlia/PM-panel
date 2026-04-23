@@ -1,204 +1,386 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProjectForm from '../components/vue/ProjectForm.vue';
-import ProjectList from '../components/vue/ProjectList.vue';
-import ThemeToggle from '../components/vue/ThemeToggle.vue';
-import Toast from '../components/vue/Toast.vue';
-
-// Check auth
-const sessionCookie = Astro.cookies.get('session');
-if (!sessionCookie) {
-  return Astro.redirect('/login');
-}
-
-const user = JSON.parse(sessionCookie.value);
+import Footer from '../components/vue/Footer.vue';
 ---
 
-<Layout title="Client Handoff Dashboard">
-  <div class="dashboard">
-    <div class="header-container">
-      <header class="portal-header">
-        <div class="brand">
-          <span class="logo">PM-panel</span>
-          <span class="divider">|</span>
-          <span class="portal-name">Admin Dashboard</span>
+<Layout title="PM-Panel - Stop Losing Clients to Miscommunication">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <span>PM-Panel</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="/login" data-astro-reload><button class="btn btn-secondary">Login</button></a>
+                    <a href="/register" data-astro-reload><button class="btn btn-primary">Register</button></a>
+                </div>
+            </nav>
         </div>
-        <div class="header-actions">
-          <span class="user-name">{user.name}</span>
-          <ThemeToggle client:load />
-          <button id="logout-btn" class="btn-logout" title="Logout">
-            <i class="fa-solid fa-sign-out-alt"></i>
-          </button>
-        </div>
-      </header>
-    </div>
-
-    <header class="page-header">
-      <h1>Project Manager Dashboard</h1>
-      <p class="subtitle">Manage your client projects efficiently</p>
     </header>
 
-    <div class="dashboard-grid">
-      <section class="form-section">
-        <h2>Create Project</h2>
-        <ProjectForm client:load />
-      </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Stop Losing Clients to Miscommunication. Deliver Projects with Confidence.</h1>
+                <p class="hero-subtitle">
+                    PM-Panel is the all-in-one client project management platform built for freelancers and agencies who want to eliminate endless email threads, missed deadlines, and scope creep.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary btn-large">Start Your First Project — Free Forever</button>
+                    <button class="btn btn-secondary btn-large">See How It Works (2-Min Demo)</button>
+                </div>
+                <p class="hero-trust">Join 500+ Freelancers Delivering Better Client Experiences</p>
+            </div>
+        </div>
+    </section>
 
-      <section class="list-section">
-        <h2>All Projects</h2>
-        <ProjectList client:load />
-      </section>
-    </div>
-  </div>
-  
-  <!-- Global Toast Container - client:only karena pakai Teleport -->
-  <Toast client:only="vue" position="top-right" />
+    <!-- Problem Section -->
+    <section class="section section-problem">
+        <div class="container">
+            <h2 class="section-title">Sound Familiar?</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <h3>The Email Chaos</h3>
+                    <p>Important feedback buried in 47-email threads. You spend hours searching for "that one attachment from last Tuesday."</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon"><i class="fa-solid fa-rotate"></i></div>
+                    <h3>The Scope Creep Trap</h3>
+                    <p>Client requests "just one small change" that turns into 12 unpaid revisions with no paper trail.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon"><i class="fa-solid fa-clock"></i></div>
+                    <h3>The Status Update Dance</h3>
+                    <p>Daily "Is it done yet?" messages interrupting deep work, but clients still feel left in the dark.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon"><i class="fa-solid fa-box"></i></div>
+                    <h3>The Handoff Horror</h3>
+                    <p>Delivering final files via Google Drive link with zero context, hoping the client figures it out.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                    <h3>The Lost Revenue</h3>
+                    <p>Projects dragging 3 months past deadline because feedback loops take weeks instead of hours.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon"><i class="fa-solid fa-file-contract"></i></div>
+                    <h3>The Contract Confusion</h3>
+                    <p>Verbal agreements and handshake deals lead to disputes. No written record of what was actually promised.</p>
+                </div>
+            </div>
+            <p class="problem-cost">
+                <strong>The Real Cost:</strong> Every day of miscommunication costs you money, reputation, and sanity.
+            </p>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section section-solution">
+        <div class="container">
+            <h2 class="section-title">One Platform. Zero Confusion.</h2>
+            <div class="solution-content">
+                <div class="solution-text">
+                    <div class="solution-item">
+                        <h4><i class="fa-solid fa-bullseye"></i> Master Database (Your Control Center)</h4>
+                        <ul>
+                            <li>Stores all your projects metadata</li>
+                            <li>Each project gets: name, slug, client info, status (draft/review/done)</li>
+                            <li>Turso Database credentials for isolated connections</li>
+                            <li>Secure, revokable share tokens for client access</li>
+                        </ul>
+                    </div>
+                    <div class="solution-item">
+                        <h4><i class="fa-solid fa-lock"></i> Tenant Database (Per-Project Isolation)</h4>
+                        <ul>
+                            <li>Each project has its own dedicated database</li>
+                            <li>Real-time messaging between you and client</li>
+                            <li>File attachments with context</li>
+                            <li>Unread indicators and author tracking</li>
+                        </ul>
+                    </div>
+                    <div class="solution-why">
+                        <strong>Why This Matters:</strong>
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Complete client data isolation</li>
+                            <li><i class="fa-solid fa-check"></i> True data ownership (delete = gone forever)</li>
+                            <li><i class="fa-solid fa-check"></i> Scale to unlimited clients</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-number">1</div>
+                    <h3>Project Organization with Status Tracking</h3>
+                    <div class="status-demo">
+                        <span class="badge badge-draft">Draft</span>
+                        <span class="badge badge-review">Review</span>
+                        <span class="badge badge-done">Done</span>
+                    </div>
+                    <p>Visual status badges so clients know exactly where things stand. No more "Is my website done?" questions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">2</div>
+                    <h3>Shareable Client Portal</h3>
+                    <ul>
+                        <li>Generate unique, secure links for each client</li>
+                        <li>No client signup required</li>
+                        <li>Revoke access anytime</li>
+                        <li>Mobile-responsive for on-the-go feedback</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">3</div>
+                    <h3>Contextual Communication</h3>
+                    <ul>
+                        <li>Every message tied to a specific project</li>
+                        <li>Reply threading keeps conversations organized</li>
+                        <li>File attachments with previews</li>
+                        <li>Timestamped history for easy reference</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">4</div>
+                    <h3>Smart Notifications</h3>
+                    <ul>
+                        <li>Unread badges show when clients leave feedback</li>
+                        <li>Email-like read receipts for critical messages</li>
+                        <li>Activity timestamps track last interaction</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">5</div>
+                    <h3>Dark & Light Mode</h3>
+                    <ul>
+                        <li>Automatic theme detection from system preference</li>
+                        <li>One-click toggle between dark and light mode</li>
+                        <li>Theme preference saved for next visit</li>
+                        <li>Easy on the eyes for late-night work sessions</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">6</div>
+                    <h3>File Attachments</h3>
+                    <ul>
+                        <li>Upload images, PDFs, and documents to any note</li>
+                        <li>Inline previews for quick reference</li>
+                        <li>Downloadable files for client review</li>
+                        <li>Organized by project and conversation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section section-steps">
+        <div class="container">
+            <h2 class="section-title">From Chaos to Clarity in 3 Minutes</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-header">
+                        <span class="step-number">Step 1</span>
+                        <span class="step-time">30 seconds</span>
+                    </div>
+                    <h3>Create Your First Project</h3>
+                    <ol>
+                        <li>Log in to your admin dashboard</li>
+                        <li>Click "Create Project"</li>
+                        <li>Fill: Project Name, Client Name, Description</li>
+                    </ol>
+                    <div class="step-result">
+                        <strong>PM-Panel auto-generates:</strong>
+                        <ul>
+                            <li>Unique slug (URL-friendly identifier)</li>
+                            <li>Share token (secure access link)</li>
+                            <li>Tenant database (isolated storage)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <span class="step-number">Step 2</span>
+                        <span class="step-time">15 seconds</span>
+                    </div>
+                    <h3>Share with Client</h3>
+                    <ol>
+                        <li>Click the project card</li>
+                        <li>Copy the Share Link (looks like: <code>pm.vendaar.top/share/abc123</code>)</li>
+                        <li>Send via email, WhatsApp, Slack, or text</li>
+                        <li>Client opens link → immediately sees project status and chat interface</li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <span class="step-number">Step 3</span>
+                        <span class="step-time">Ongoing</span>
+                    </div>
+                    <h3>Collaborate & Deliver</h3>
+                    <ul>
+                        <li><strong>You:</strong> Upload designs, ask questions, update status</li>
+                        <li><strong>Client:</strong> Views progress, adds feedback, approves deliverables</li>
+                        <li><strong>Status Updates:</strong> Move project from "Draft" → "Review" → "Done"</li>
+                        <li><strong>File Delivery:</strong> Attach final files directly in conversation</li>
+                        <li><strong>Archive:</strong> Delete project when done (cleans up dashboard)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pro-tips">
+                <h3><i class="fa-solid fa-lightbulb"></i> Pro Tips</h3>
+                <div class="tips-grid">
+                    <div class="tip">
+                        <strong>Multiple Projects:</strong> Create unlimited projects for different clients
+                    </div>
+                    <div class="tip">
+                        <strong>Status Colors:</strong> Green = Done, Yellow = Review, Gray = Draft
+                    </div>
+                    <div class="tip">
+                        <strong>Mobile Access:</strong> Clients can check progress from their phone
+                    </div>
+                    <div class="tip">
+                        <strong>No Login Hassle:</strong> Clients never need to remember passwords
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="section section-comparison">
+        <div class="container">
+            <h2 class="section-title">Why PM-Panel vs. Alternatives</h2>
+            <div class="comparison-table">
+                <div class="comparison-row comparison-header">
+                    <div class="comparison-tool">Tool</div>
+                    <div class="comparison-problem">The Problem</div>
+                    <div class="comparison-solution">PM-Panel Solution</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-tool"><strong>Email</strong></div>
+                    <div class="comparison-problem">Lost threads, no context</div>
+                    <div class="comparison-solution">Everything project-centric</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-tool"><strong>Slack</strong></div>
+                    <div class="comparison-problem">Mixed conversations, client sees all channels</div>
+                    <div class="comparison-solution">Isolated per-project spaces</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-tool"><strong>Trello/Asana</strong></div>
+                    <div class="comparison-problem">Clients need accounts, complex setup</div>
+                    <div class="comparison-solution">One-click access, zero learning curve</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-tool"><strong>Notion</strong></div>
+                    <div class="comparison-problem">Overwhelming, not purpose-built</div>
+                    <div class="comparison-solution">Built for one thing: client handoffs</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-tool"><strong>Custom Solution</strong></div>
+                    <div class="comparison-problem">Months of dev time</div>
+                    <div class="comparison-solution">Deploy in minutes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Is This For Section -->
+    <section class="section section-audience">
+        <div class="container">
+            <h2 class="section-title">Who Is This For?</h2>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <h3>Independent Freelancers</h3>
+                    <ul>
+                        <li>Designers, writers, developers tired of endless revision loops</li>
+                        <li>Creatives drowning in scattered feedback across email/WhatsApp</li>
+                        <li>Solo professionals needing to look enterprise-level organized</li>
+                    </ul>
+                </div>
+                <div class="audience-card">
+                    <h3>Creative Teams</h3>
+                    <ul>
+                        <li>Agencies managing multiple clients with overlapping deadlines</li>
+                        <li>Teams where project info gets lost between handoffs</li>
+                        <li>Anyone billing hourly and needs proof of work delivered</li>
+                    </ul>
+                </div>
+                <div class="audience-card">
+                    <h3>Service Providers</h3>
+                    <ul>
+                        <li>Video editors, illustrators, photographers with client deliverables</li>
+                        <li>Consultants needing signed-off approval on every milestone</li>
+                        <li>Anyone who sends work and waits weeks for feedback</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section section-faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>Do my clients need to sign up?</summary>
+                    <p>No. Share links work instantly. Zero friction for clients.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I delete a project and all its data?</summary>
+                    <p>Yes. Delete project → Master DB entry + Tenant DB + all messages gone forever.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Is it really free?</summary>
+                    <p>Yes. Core features free for small teams. Upgrade for advanced features later.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What happens to my data?</summary>
+                    <p>You own it. Export anytime. Delete anytime. We don't sell data.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can clients see my other projects?</summary>
+                    <p>Never. Each share link is isolated to one project only.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section section-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to End the Miscommunication Chaos?</h2>
+                <p>Join hundreds of freelancers and agencies delivering better client experiences.</p>
+                <button class="btn btn-primary btn-large">Start Your First Project — Free Forever</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <Footer client:only="vue" />
 </Layout>
 
-<style>
-  .dashboard {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: var(--color-bg);
-  }
-
-  .header-container {
-    width: 100%;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .portal-header {
-    max-width: 1200px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .logo {
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: var(--color-text);
-  }
-
-  .divider {
-    color: var(--color-text-muted);
-  }
-
-  .portal-name {
-    color: var(--color-text-secondary);
-    font-size: 0.9375rem;
-  }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .user-name {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-    font-weight: 500;
-  }
-
-  .btn-logout {
-    padding: 0.5rem;
-    background: none;
-    border: 1px solid var(--color-border);
-    border-radius: 0.375rem;
-    color: var(--color-text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-  }
-
-  .btn-logout:hover {
-    background: var(--color-error);
-    color: var(--color-bg);
-    border-color: var(--color-error);
-  }
-
-  .page-header {
-    max-width: 1200px;
-    width: 100%;
-    margin: 2rem auto;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .page-header h1 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: 0.5rem;
-  }
-
-  .subtitle {
-    color: var(--color-text-secondary);
-    font-size: 1rem;
-  }
-
-  .dashboard-grid {
-    max-width: 1200px;
-    width: 100%;
-    margin: 2rem auto;
-    padding-bottom: 1.5rem;
-    
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  @media (min-width: 900px) {
-    .dashboard-grid {
-      grid-template-columns: 320px 1fr;
-    }
-  }
-
-  section h2 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--color-text);
-    margin-bottom: 1rem;
-  }
-
-  .form-section {
-    background: var(--color-surface);
-    padding: 1.5rem;
-    border-radius: 0.75rem;
-    border: 1px solid var(--color-border);
-    height: fit-content;
-  }
-
-  .list-section {
-    min-width: 0;
-  }
-</style>
-
-<script>
-  document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    try {
-      const response = await fetch('/api/auth/logout', { method: 'POST' });
-      if (response.ok) {
-        window.location.href = '/login';
-      }
-    } catch (err) {
-      console.error('Logout failed:', err);
-    }
-  });
-</script>
+<link rel="stylesheet" href="/fix.css">

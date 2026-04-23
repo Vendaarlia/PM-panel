@@ -1,11 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-// Redirect if already logged in
-const sessionCookie = Astro.cookies.get('session');
-if (sessionCookie) {
-  return Astro.redirect('/');
-}
 ---
 
 <Layout title="Register | Vendaar Admin">

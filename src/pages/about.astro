@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/vue/Header.vue';
+import Footer from '../components/vue/Footer.vue';
+---
+
+<Layout title="About - PM-Panel">
+    <!-- Header -->
+    <Header client:only="vue" />
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">About PM-Panel</h1>
+            <p class="hero-subtitle">Built by freelancers, for freelancers. We understand the chaos of client management because we've lived it.</p>
+        </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="section">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-block">
+                    <h2>Our Story</h2>
+                    <p>PM-Panel was born from frustration. As freelancers juggling multiple client projects, we were drowning in email threads, lost files, and endless "Is it done yet?" messages. We tried every project management tool out there — but they were either too complex, too expensive, or forced clients to create accounts they'd never use.</p>
+                    <p>So we built something different. A lightweight, client-friendly platform that keeps everyone aligned without the overhead of enterprise software.</p>
+                </div>
+
+                <div class="content-block">
+                    <h2>Our Mission</h2>
+                    <p>We believe great work happens when communication is clear, organized, and respectful of everyone's time. Our mission is to eliminate the friction between freelancers and their clients — so projects finish faster, relationships stay healthy, and everyone wins.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Makes Us Different -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">What Makes Us Different</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h3>No Client Login Required</h3>
+                    <p>Share secure, unique links. Clients access their project portal instantly — no passwords, no onboarding, no friction.</p>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-database"></i>
+                    <h3>True Data Isolation</h3>
+                    <p>Each project lives in its own database. Delete a project and its data is gone forever — giving you and your clients real ownership.</p>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-feather"></i>
+                    <h3>Lightweight by Design</h3>
+                    <p>No bloated features you'll never use. Just the essentials: organized projects, clear communication, and status tracking.</p>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-heart"></i>
+                    <h3>Made for Small Teams</h3>
+                    <p>We don't chase enterprise contracts. Every feature is built with freelancers, agencies, and side hustlers in mind.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Philosophy -->
+    <section class="section">
+        <div class="container">
+            <div class="content-block centered">
+                <h2>Built for Performance & Privacy</h2>
+                <p>PM-Panel runs on modern, fast infrastructure. We use Turso's edge databases to keep data close to users worldwide. No tracking pixels. No unnecessary cookies. Just a tool that works.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team / Contact -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="content-block centered">
+                <h2>Get in Touch</h2>
+                <p>Questions, feedback, or just want to say hi? We'd love to hear from you.</p>
+                <div class="contact-links">
+                    <a href="mailto:hello@pm-panel.com" class="contact-link">
+                        <i class="fa-solid fa-envelope"></i>
+                        hello@pm-panel.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <Footer client:only="vue" />
+</Layout>
+
+<link rel="stylesheet" href="/fix.css">
+
+<style>
+    .hero {
+        padding: 100px 0 60px;
+        text-align: center;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero-title {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+        color: var(--color-text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 48px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .content-block h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .content-block p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        margin-bottom: 16px;
+    }
+
+    .content-block.centered {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .section-alt {
+        background: var(--color-surface);
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 32px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .feature-item {
+        text-align: center;
+        padding: 32px 24px;
+    }
+
+    .feature-item i {
+        font-size: 32px;
+        color: var(--color-primary);
+        margin-bottom: 16px;
+    }
+
+    .feature-item h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .feature-item p {
+        color: var(--color-text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .contact-links {
+        margin-top: 24px;
+    }
+
+    .contact-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--color-primary);
+        font-size: 16px;
+    }
+
+    .contact-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 32px;
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
