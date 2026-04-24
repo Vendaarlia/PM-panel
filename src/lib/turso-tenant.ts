@@ -106,21 +106,14 @@ export async function getTenantClientBySlug(
   const project = projectResult[0];
   console.log(`[getTenantClientBySlug] Has tursoDbUrl: ${!!project.tursoDbUrl}, Has tursoDbToken: ${!!project.tursoDbToken}`);
   
-  // Get credentials from project or fallback to env vars
-  let dbUrl = project.tursoDbUrl;
-  let dbToken = project.tursoDbToken;
-  
-  // Fallback to env vars if project credentials not set (for quick setup)
-  if (!dbUrl || !dbToken) {
-    console.log(`[getTenantClientBySlug] Using env vars fallback`);
-    dbUrl = (globalThis as any).TURSO_TENANT_DB_URL || process.env.TURSO_TENANT_DB_URL;
-    dbToken = (globalThis as any).TURSO_TENANT_DB_TOKEN || process.env.TURSO_TENANT_DB_TOKEN;
-  }
+  // Get credentials from project
+  const dbUrl = project.tursoDbUrl;
+  const dbToken = project.tursoDbToken;
   
   if (!dbUrl || !dbToken) {
     throw new Error(
-      `Project "${slug}" does not have Turso database configured ` +
-      `and TURSO_TENANT_DB_URL/TURSO_TENANT_DB_TOKEN env vars not set.`
+      `Project "${slug}" does not have Turso database configured. ` +
+      `Please provision a database for this project or delete and recreate it.`
     );
   }
   

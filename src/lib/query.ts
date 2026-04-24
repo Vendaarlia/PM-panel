@@ -74,6 +74,16 @@ export async function createProject(data: NewProject) {
   return result[0];
 }
 
+export async function updateProject(id: number, data: Partial<NewProject>) {
+  const db = await getDb();
+  const result = await (db as any)
+    .update(projects)
+    .set(data)
+    .where(eq(projects.id, id))
+    .returning();
+  return result[0];
+}
+
 export async function updateProjectStatus(id: number, status: 'draft' | 'review' | 'done') {
   const db = await getDb();
   const result = await (db as any)

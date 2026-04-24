@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getAllProjects, createProject, updateProjectStatus, deleteProject } from '../../lib/query';
+import { getAllProjects, createProject, updateProjectStatus, deleteProject, updateProject } from '../../lib/query';
 import { getUniqueSlug } from '../../lib/slug';
+import { createTenantDatabase } from '../../lib/turso-platform';
+import { initTenantSchema } from '../../lib/turso-tenant';
 import type { Project } from '../../db/schema';
 
 export const GET: APIRoute = async () => {
@@ -51,7 +53,8 @@ export const POST: APIRoute = async ({ request }) => {
     const existingSlugs = existingProjects.map((p: Project) => p.slug);
     const slug = getUniqueSlug(name, existingSlugs);
 
-    const project = await createProject({
+    // 1. Create project in Master DB (without DB credentials first)
+    let project = await createProject({
       name,
       slug,
       client,
@@ -59,12 +62,69 @@ export const POST: APIRoute = async ({ request }) => {
       status,
     });
 
+    console.log('[POST /api/projects] Project created:', project.id, project.slug);
+
+    // 2. Provision Turso tenant database for this project
+    try {
+      console.log('[POST /api/projects] Provisioning Turso database for slug:', slug);
+      
+      // Debug: Check all env vars
+      const envVars = {
+        TURSO_PLATFORM_API_TOKEN: process.env.TURSO_PLATFORM_API_TOKEN ? 'SET' : 'NOT SET',
+        TURSO_ORGANIZATION: process.env.TURSO_ORGANIZATION,
+        TURSO_LOCATION: process.env.TURSO_LOCATION,
+        TURSO_MASTER_DB_URL: process.env.TURSO_MASTER_DB_URL ? 'SET' : 'NOT SET',
+      };
+      console.log('[POST /api/projects] ENV vars:', envVars);
+      
+      if (!process.env.TURSO_PLATFORM_API_TOKEN) {
+        console.error('[POST /api/projects] ERROR: TURSO_PLATFORM_API_TOKEN is not set!');
+        console.error('[POST /api/projects] Please check your .env file');
+        throw new Error('TURSO_PLATFORM_API_TOKEN not configured');
+      }
+      const { dbUrl, dbToken } = await createTenantDatabase(slug);
+      console.log('[POST /api/projects] Turso DB created:', dbUrl);
+
+      // 3. Initialize schema in the new tenant database
+      await initTenantSchema(dbUrl, dbToken);
+      console.log('[POST /api/projects] Tenant schema initialized');
+
+      // 4. Update project with Turso credentials
+      console.log('[POST /api/projects] Updating project with credentials:', { 
+        projectId: project.id, 
+        dbUrl: dbUrl.substring(0, 30) + '...',
+        hasToken: !!dbToken 
+      });
+      project = await updateProject(project.id, {
+        tursoDbUrl: dbUrl,
+        tursoDbToken: dbToken,
+      });
+      console.log('[POST /api/projects] Project updated:', {
+        id: project.id,
+        hasDbUrl: !!project.tursoDbUrl,
+        hasDbToken: !!project.tursoDbToken,
+      });
+    } catch (dbError) {
+      console.error('[POST /api/projects] Failed to provision Turso DB:', dbError);
+      console.error('[POST /api/projects] Error stack:', dbError instanceof Error ? dbError.stack : 'No stack');
+      // Project created but DB provisioning failed
+      // Return project anyway with warning, can retry later via provision script
+      project = {
+        ...project,
+        _warning: 'Database provisioning failed: ' + (dbError instanceof Error ? dbError.message : 'Unknown error'),
+      };
+    }
+
     return new Response(JSON.stringify(project), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to create project' }), {
+    console.error('[POST /api/projects] ERROR:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Failed to create project',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

@@ -15,9 +15,11 @@
 const TURSO_API_BASE = 'https://api.turso.tech/v1';
 
 interface TursoDatabase {
-  name: string;
-  hostname: string;
-  group?: string;
+  Name: string;
+  Hostname: string;
+  DbId?: string;
+  IssuedCertCount?: number;
+  IssuedCertLimit?: number;
 }
 
 interface TursoToken {
@@ -33,9 +35,22 @@ interface CreateTokenResponse {
   token: TursoToken;
 }
 
+// Helper to get env var from multiple sources (Node.js process.env or Astro import.meta.env)
+function getEnvVar(name: string): string | undefined {
+  // Try process.env first (Node.js/Local dev)
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[name];
+  }
+  // Try import.meta.env (Astro)
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env[name];
+  }
+  return undefined;
+}
+
 // Get API token from environment
 function getApiToken(): string {
-  const token = process.env.TURSO_PLATFORM_API_TOKEN;
+  const token = getEnvVar('TURSO_PLATFORM_API_TOKEN');
   if (!token) {
     throw new Error('TURSO_PLATFORM_API_TOKEN environment variable is required');
   }
@@ -43,7 +58,7 @@ function getApiToken(): string {
 }
 
 function getOrganization(): string {
-  const org = process.env.TURSO_ORGANIZATION;
+  const org = getEnvVar('TURSO_ORGANIZATION');
   if (!org) {
     throw new Error('TURSO_ORGANIZATION environment variable is required');
   }
@@ -51,11 +66,11 @@ function getOrganization(): string {
 }
 
 function getGroup(): string | undefined {
-  return process.env.TURSO_GROUP;
+  return getEnvVar('TURSO_GROUP');
 }
 
 function getLocation(): string {
-  return process.env.TURSO_LOCATION || 'sin'; // Default to Singapore
+  return getEnvVar('TURSO_LOCATION') || 'sin'; // Default to Singapore
 }
 
 /**
@@ -83,6 +98,22 @@ export async function createTenantDatabase(projectSlug: string): Promise<{
   const dbName = `tenant-${projectSlug}-${timestamp}`.toLowerCase().replace(/[^a-z0-9-]/g, '-');
   
   // 1. Create the database via Turso Platform API
+  // Build request body - either group or seed must be set
+  const requestBody: Record<string, string> = {
+    name: dbName,
+    location,
+  };
+  if (group && group.trim() !== '') {
+    requestBody.group = group;
+  }
+  // If no group, we need a seed database
+  // Use 'empty' or create a dedicated empty template database
+  if (!group || group.trim() === '') {
+    requestBody.seed = 'empty';  // Use Turso's built-in empty database as seed
+  }
+  
+  console.log('[createTenantDatabase] Creating DB with body:', JSON.stringify(requestBody));
+  
   const createDbResponse = await fetch(
     `${TURSO_API_BASE}/organizations/${organization}/databases`,
     {
@@ -91,13 +122,7 @@ export async function createTenantDatabase(projectSlug: string): Promise<{
         'Authorization': `Bearer ${apiToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: dbName,
-        location,
-        group,
-        // Optional: Set database size limit for free tier
-        // size_limit: '500mb',
-      }),
+      body: JSON.stringify(requestBody),
     }
   );
   
@@ -106,7 +131,9 @@ export async function createTenantDatabase(projectSlug: string): Promise<{
     throw new Error(`Failed to create Turso database: ${createDbResponse.status} - ${error}`);
   }
   
-  const { database } = await createDbResponse.json() as CreateDatabaseResponse;
+  const createDbResult = await createDbResponse.json();
+  console.log('[createTenantDatabase] Create DB response:', JSON.stringify(createDbResult, null, 2));
+  const database = createDbResult.database;
   
   // 2. Create an auth token for the new database
   // This token will be used by the application to connect to the tenant DB
@@ -138,15 +165,33 @@ export async function createTenantDatabase(projectSlug: string): Promise<{
     throw new Error(`Failed to create database token: ${createTokenResponse.status} - ${error}`);
   }
   
-  const { token } = await createTokenResponse.json() as CreateTokenResponse;
+  const tokenResult = await createTokenResponse.json();
+  console.log('[createTenantDatabase] Token response:', JSON.stringify(tokenResult, null, 2));
+  
+  // Handle different response formats
+  let dbToken: string;
+  if (tokenResult.jwt) {
+    // New format: { jwt: "..." }
+    dbToken = tokenResult.jwt;
+  } else if (tokenResult.token && tokenResult.token.token) {
+    // Old format: { token: { token: "..." } }
+    dbToken = tokenResult.token.token;
+  } else if (typeof tokenResult.token === 'string') {
+    // Alternative format: { token: "..." }
+    dbToken = tokenResult.token;
+  } else {
+    console.error('[createTenantDatabase] Unexpected token response format:', tokenResult);
+    throw new Error('Unexpected token response format from Turso API');
+  }
   
   // 3. Construct the database URL
-  // Format: libsql://[db-name]-[organization].turso.io
-  const dbUrl = `libsql://${database.hostname}`;
+  // Format: libsql://[hostname]
+  const dbUrl = `libsql://${database.Hostname}`;
+  console.log('[createTenantDatabase] Constructed URL:', dbUrl);
   
   return {
     dbUrl,
-    dbToken: token.token,
+    dbToken,
   };
 }
 
