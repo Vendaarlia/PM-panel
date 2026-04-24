@@ -13,6 +13,7 @@ cleanup-secrets.sh
 MCP-deploy.zip
 MCP-centeredDB.zip
 MCP-multiDB.zip
+FULL-MCP-all-page-compleat.zip
 
 # wrangler files
 .wrangler
