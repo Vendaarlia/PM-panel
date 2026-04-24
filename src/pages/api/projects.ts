@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getAllProjects, createProject, updateProjectStatus, deleteProject, updateProject } from '../../lib/query';
+import { getAllProjects, getProjectById, createProject, updateProjectStatus, deleteProject, updateProject } from '../../lib/query';
 import { getUniqueSlug } from '../../lib/slug';
 import { createTenantDatabase } from '../../lib/turso-platform';
 import { initTenantSchema } from '../../lib/turso-tenant';
@@ -169,14 +169,57 @@ export const DELETE: APIRoute = async ({ request }) => {
       );
     }
 
-    await deleteProject(Number(id));
+    const projectId = Number(id);
+
+    // 1. Get project details to extract tenant DB name
+    const project = await getProjectById(projectId);
+    if (!project) {
+      return new Response(
+        JSON.stringify({ error: 'Project not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // 2. Delete tenant database if exists
+    if (project.tursoDbUrl) {
+      try {
+        // Extract DB name from URL: libsql://[db-name]-[org].[region].turso.io
+        // Format: tenant-{slug}-{timestamp}-{organization}.{region}.turso.io
+        // We need just: tenant-{slug}-{timestamp}
+        const hostnameMatch = project.tursoDbUrl.match(/libsql:\/\/([^\.]+)\./);
+        if (hostnameMatch) {
+          const fullHostname = hostnameMatch[1]; // e.g., tenant-bluevils-moccyxn6-joomlacort
+          // Remove organization suffix
+          // Pattern: tenant-{slug}-{timestamp}-{organization}
+          // Example: tenant-bluevils-moccyxn6-joomlacort
+          // Split and take first 3 parts: tenant + slug + timestamp
+          const parts = fullHostname.split('-');
+          const dbName = parts.slice(0, 3).join('-');
+          console.log(`[DELETE /api/projects] Full hostname: ${fullHostname}`);
+          console.log(`[DELETE /api/projects] Extracted DB name: ${dbName}`);
+          const { deleteTenantDatabase } = await import('../../lib/turso-platform');
+          await deleteTenantDatabase(dbName);
+          console.log(`[DELETE /api/projects] Tenant database deleted: ${dbName}`);
+        }
+      } catch (dbError) {
+        console.error(`[DELETE /api/projects] Failed to delete tenant DB:`, dbError);
+        // Continue to delete project even if DB deletion fails
+      }
+    }
+
+    // 3. Delete project from master DB
+    await deleteProject(projectId);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to delete project' }), {
+    console.error('[DELETE /api/projects] ERROR:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Failed to delete project',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

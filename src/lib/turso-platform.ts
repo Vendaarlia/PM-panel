@@ -202,8 +202,11 @@ export async function deleteTenantDatabase(dbName: string): Promise<void> {
   const apiToken = getApiToken();
   const organization = getOrganization();
   
+  const deleteUrl = `${TURSO_API_BASE}/organizations/${organization}/databases/${dbName}`;
+  console.log(`[deleteTenantDatabase] Deleting: ${deleteUrl}`);
+  
   const response = await fetch(
-    `${TURSO_API_BASE}/organizations/${organization}/databases/${dbName}`,
+    deleteUrl,
     {
       method: 'DELETE',
       headers: {
@@ -212,9 +215,18 @@ export async function deleteTenantDatabase(dbName: string): Promise<void> {
     }
   );
   
+  console.log(`[deleteTenantDatabase] Response status: ${response.status}`);
+  
   if (!response.ok && response.status !== 404) {
     const error = await response.text();
+    console.error(`[deleteTenantDatabase] Error: ${error}`);
     throw new Error(`Failed to delete Turso database: ${response.status} - ${error}`);
+  }
+  
+  if (response.status === 404) {
+    console.log(`[deleteTenantDatabase] Database not found (already deleted?): ${dbName}`);
+  } else {
+    console.log(`[deleteTenantDatabase] Database deleted successfully: ${dbName}`);
   }
 }
 
