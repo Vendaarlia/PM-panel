@@ -95,10 +95,10 @@ const shareUrl = `${Astro.url.origin}/share/${shareToken}`;
           <p class="share-hint">Save this link to access the project anytime:</p>
           <div class="share-link-box">
             <input type="text" value={shareUrl} readonly id="share-url" />
-            <button class="btn-copy" id="copy-btn">
+            <!-- <button class="btn-copy" id="copy-btn">
               <i class="fa-regular fa-copy"></i>
               Copy
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@ const shareUrl = `${Astro.url.origin}/share/${shareToken}`;
     <Toast client:only="vue" position="top-center" />
 
     <footer class="portal-footer">
-      <p>Powered by <strong>Vendaar</strong> — Design-driven frontend partner</p>
+      <p>Powered by <strong>Vendaar</strong> — Known for being a reliable partner</p>
     </footer>
   </div>
 </Layout>
@@ -385,6 +385,7 @@ const shareUrl = `${Astro.url.origin}/share/${shareToken}`;
     background: var(--color-bg);
     color: var(--color-text);
     font-size: 0.875rem;
+    font-family: monospace;
   }
 
   .btn-copy {
@@ -409,6 +410,14 @@ const shareUrl = `${Astro.url.origin}/share/${shareToken}`;
 
   .btn-copy i {
     font-size: 0.875rem;
+  }
+
+  .discussion-section {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    min-height: 400px;
   }
 
   .discussion-card {

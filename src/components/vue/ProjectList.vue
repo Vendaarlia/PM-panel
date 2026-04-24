@@ -254,24 +254,40 @@ time {
 }
 
 .btn-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
   color: var(--color-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
 }
 
 .btn-link:hover {
-  text-decoration: underline;
+  background: var(--color-bg);
+  border-color: var(--color-border-hover);
 }
 
 .btn-delete {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
   color: var(--color-error);
-  background: none;
-  border: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-error-bg);
+  border-radius: 0.375rem;
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
 }
 
 .btn-delete:hover {
-  text-decoration: underline;
+  background: var(--color-error);
+  color: var(--color-bg);
 }
 </style>
