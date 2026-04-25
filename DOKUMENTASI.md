@@ -17,7 +17,7 @@ PM-Panel adalah **Project Management SaaS Platform** yang dibangun dengan pendek
 
 ---
 
-## 🎯 Project Goals & Achievement
+## Project Goals & Achievement
 
 ### Original Vision
 
@@ -27,15 +27,15 @@ PM-Panel adalah **Project Management SaaS Platform** yang dibangun dengan pendek
 
 SaaS platform dengan arsitektur **"Master + Multi-Tenant Database"** yang memungkinkan:
 
-- ✅ Single dashboard untuk manage multiple projects
-- ✅ **Isolated database per project** (data terpisah, aman)
-- ✅ Client portal dengan shareable link
-- ✅ Real-time chat/notes per project
-- ✅ File upload & attachment support
+- [X] Single dashboard untuk manage multiple projects
+- [X] **Isolated database per project** (data terpisah, aman)
+- [X] Client portal dengan shareable link
+- [X] Real-time chat/notes per project
+- [X] File upload & attachment support
 
 ---
 
-## 🏗️ Technical Architecture
+## Technical Architecture
 
 ### High-Level Architecture Diagram
 
@@ -78,7 +78,7 @@ SaaS platform dengan arsitektur **"Master + Multi-Tenant Database"** yang memung
 
 ---
 
-## 🧠 AI Collaboration Methodology
+## AI Collaboration Methodology
 
 ### How I Worked With Cascade (AI Assistant)
 
@@ -107,7 +107,7 @@ MY ROLE                          CASCADE'S ROLE
    Problem: "Delete project tidak menghapus tenant DB"
    Cascade: "Kita perlu extract DB name dari URL..."
    [Debug bersama, fix regex pattern]
-   Result: Working tenant cleanup ✅
+   Result: Working tenant cleanup [OK]
    ```
 3. **Code Review & Iteration**
 
@@ -128,11 +128,11 @@ MY ROLE                          CASCADE'S ROLE
 
 ---
 
-## 🚀 Key Features Implemented
+## Key Features Implemented
 
 ### 1. Multi-Tenant Database System
 
-**Complexity**: ⭐⭐⭐⭐⭐
+**Complexity**: 5/5
 
 Setiap project auto-provision database sendiri di Turso:
 
@@ -145,12 +145,12 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 **Problem Solved**:
 
-- ❌ Awalnya: Semua project share 1 database → data bercampur
-- ✅ Sekarang: Tiap project punya DB terpisah → data isolated & aman
+- X Awalnya: Semua project share 1 database → data bercampur
+- ✓ Sekarang: Tiap project punya DB terpisah → data isolated & aman
 
 ### 2. Client Portal with Shareable Links
 
-**Complexity**: ⭐⭐⭐⭐
+**Complexity**: 4/5
 
 - Generate unique share token per project
 - Client access tanpa login (via `/share/{token}`)
@@ -159,7 +159,7 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 ### 3. Real-Time Chat System
 
-**Complexity**: ⭐⭐⭐⭐
+**Complexity**: 4/5
 
 - Vue 3 reactive components
 - File upload dengan preview
@@ -168,7 +168,7 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 ### 4. Theme System (Dark/Light)
 
-**Complexity**: ⭐⭐⭐
+**Complexity**: 3/5
 
 ```css
 :root { /* Light mode */ }
@@ -181,7 +181,7 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 ---
 
-## 📸 Screenshot Gallery
+## Screenshot Gallery
 
 ### Dashboard Admin
 
@@ -210,7 +210,7 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 ---
 
-## 🛠️ Tech Stack Deep Dive
+## Tech Stack Deep Dive
 
 ### Frontend
 
@@ -240,7 +240,7 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 ---
 
-## 🔧 Complex Problems Solved
+## Complex Problems Solved
 
 ### Problem 1: Auto-Provisioning Tenant Database
 
@@ -275,7 +275,7 @@ Create Project → Provision Turso DB → Init Schema → Save Credentials
 
 ```javascript
 const dbName = hostname.split('-').slice(0, 3).join('-');
-// ❌ Returns: "tenant-port1" (kurang timestamp)
+// X Returns: "tenant-port1" (kurang timestamp)
 ```
 
 **Fixed Code**:
@@ -284,7 +284,7 @@ const dbName = hostname.split('-').slice(0, 3).join('-');
 const parts = hostname.split('-');
 const timestampIndex = parts.findIndex(p => /\d/.test(p));
 const dbName = parts.slice(0, timestampIndex + 1).join('-');
-// ✅ Returns: "tenant-port1-moc9rsqq" (correct)
+// ✓ Returns: "tenant-port1-moc9rsqq" (correct)
 ```
 
 **My Role**:
@@ -300,7 +300,7 @@ const dbName = parts.slice(0, timestampIndex + 1).join('-');
 **Initial Design (Wrong)**:
 
 ```typescript
-// ❌ Semua notes di 1 tabel dengan projectId
+// X Semua notes di 1 tabel dengan projectId
 export const notes = sqliteTable('notes', {
   id: integer('id').primaryKey(),
   projectId: integer('project_id'), // Ini kurang aman
@@ -311,7 +311,7 @@ export const notes = sqliteTable('notes', {
 **Final Design (Correct)**:
 
 ```typescript
-// ✅ Tiap project punya DB sendiri, notes table tanpa projectId
+// ✓ Tiap project punya DB sendiri, notes table tanpa projectId
 // Master DB: projects table (id, name, slug, tursoDbUrl, tursoDbToken)
 // Tenant DB: notes table (id, content, createdAt) - no projectId needed!
 ```
@@ -325,7 +325,7 @@ export const notes = sqliteTable('notes', {
 
 ---
 
-## 📊 Performance & Scalability
+## Performance & Scalability
 
 ### Why This Architecture Scales
 
@@ -344,7 +344,7 @@ export const notes = sqliteTable('notes', {
 
 ---
 
-## 🎓 What I Learned (As Lead Developer)
+## What I Learned (As Lead Developer)
 
 ### Technical Skills Enhanced
 
@@ -362,7 +362,7 @@ export const notes = sqliteTable('notes', {
 
 ---
 
-## 🚧 Future Roadmap
+## Future Roadmap
 
 ### Phase 2 Features (Planned)
 
@@ -381,7 +381,7 @@ export const notes = sqliteTable('notes', {
 
 ---
 
-## 🤝 AI Collaboration Credits
+## AI Collaboration Credits
 
 **AI Assistant**: Cascade (by Windsurf)
 **Human Lead**: [Your Name]
