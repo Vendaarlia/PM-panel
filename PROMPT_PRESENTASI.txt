@@ -1,0 +1,52 @@
+Create a professional portfolio presentation based on the uploaded DOKUMENTASI.md file about PM-Panel project.
+
+CONTEXT:
+This is a portfolio presentation to demonstrate my abilities as a developer who can effectively collaborate with AI (Cascade) to build complex systems. The presentation should showcase technical leadership, problem-solving skills, and the ability to architect and deliver production-ready SaaS applications.
+
+TARGET AUDIENCE:
+- Hiring managers at tech companies
+- Potential clients for freelance work
+- Peers interested in AI-human collaboration
+
+PRESENTATION GOALS:
+1. Show that I can lead AI to build complex multi-tenant architecture
+2. Demonstrate real problem-solving (debugging, fixing tenant DB issues)
+3. Prove full-stack capability (Astro + Vue + Cloudflare + Turso)
+4. Position myself as "AI Native Engineer" who leverages AI effectively
+
+KEY STORY ARC:
+Problem (freelancer managing multiple clients) → Vision (isolated data per project) → Solution (multi-tenant DB architecture) → Process (AI collaboration workflow) → Evidence (screenshots & solved problems) → Outcome (production-ready SaaS)
+
+USE SCREENSHOTS FROM:
+- /public/screenshot/result1.png (Dashboard)
+- /public/screenshot/result2.png (Client Portal)
+- /public/screenshot/result3.png (Chat)
+- /public/screenshot/result4.png (Database Proof)
+- /public/screenshot/result5.png (Landing Page)
+
+STYLE:
+- Professional but approachable
+- Technical depth with accessible explanations
+- Visual-first: diagrams, flow charts, before/after comparisons
+- Dark theme with purple accent (#9239df)
+- 10-15 slides max
+
+SLIDE STRUCTURE:
+1. Cover - PM-Panel: AI-Native SaaS Development
+2. The Challenge - Freelancer's dilemma
+3. The Vision - One dashboard, infinite isolation
+4. Technical Architecture - Edge-native multi-tenant
+5. AI Collaboration Story - Human + AI workflow
+6. Feature Deep Dive - Auto-provisioning tenant DB
+7. Client Portal - Zero-friction experience
+8. Problem Solving Showcase - Real bugs, real fixes
+9. Screenshot Gallery - See it in action
+10. Skills Enhanced - What I learned
+11. Scalability & Future - Built to grow
+12. AI Native Engineer Philosophy
+13. Connect - Let's build together
+14. Thank You
+
+TONE: Confident, collaborative, technically competent but humble. Focus on "what we built together" not "what AI did for me."
+
+DELIVERABLE: A presentation deck I can use for portfolio showcases and job interviews.
